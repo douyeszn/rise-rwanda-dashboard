@@ -96,84 +96,39 @@ export default function App() {
 
         {/* Nav items */}
         <div style={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
-          {TABS.map(({ id, label, Icon, tip }) => {
+          {TABS.map(({ id, label, Icon }) => {
             const active = tab === id;
             return (
-              <div key={id} style={{ position: "relative" }} className={`nav-item-wrap`}
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                style={{
+                  width: "100%",
+                  padding: "9px 10px",
+                  paddingLeft: active ? 8 : 10,
+                  borderRadius: 10,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  background: active ? "rgba(255,255,255,0.10)" : "transparent",
+                  border: "none",
+                  borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                  color: active ? "#fff" : "rgba(255,255,255,0.4)",
+                  cursor: "pointer",
+                  transition: "background 0.15s, color 0.15s, border-color 0.15s",
+                  textAlign: "left",
+                }}
                 onMouseEnter={(e) => {
-                  const tt = e.currentTarget.querySelector(".nav-tooltip");
-                  if (tt) tt.style.opacity = "1";
+                  if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.07)";
                 }}
                 onMouseLeave={(e) => {
-                  const tt = e.currentTarget.querySelector(".nav-tooltip");
-                  if (tt) tt.style.opacity = "0";
+                  if (!active) e.currentTarget.style.background = "transparent";
                 }}
               >
-                <button
-                  onClick={() => setTab(id)}
-                  style={{
-                    width: "100%",
-                    padding: "9px 10px",
-                    paddingLeft: active ? 8 : 10,
-                    borderRadius: 10,
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    background: active ? "rgba(255,255,255,0.10)" : "transparent",
-                    border: "none",
-                    borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                    color: active ? "#fff" : "rgba(255,255,255,0.4)",
-                    cursor: "pointer",
-                    transition: "background 0.15s, color 0.15s, border-color 0.15s",
-                    textAlign: "left",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.07)";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!active) e.currentTarget.style.background = "transparent";
-                  }}
-                >
-                  <Icon />
-                  <span style={{ fontSize: 13, fontWeight: active ? 600 : 400, letterSpacing: "0.01em" }}>{label}</span>
-                </button>
-
-                {/* Tooltip */}
-                <div className="nav-tooltip" style={{
-                  position: "absolute",
-                  left: "calc(100% + 12px)",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "#1A1A1A",
-                  color: "#fff",
-                  fontSize: 12,
-                  fontWeight: 400,
-                  lineHeight: 1.5,
-                  padding: "7px 12px",
-                  borderRadius: 8,
-                  whiteSpace: "nowrap",
-                  maxWidth: 260,
-                  whiteSpace: "normal",
-                  pointerEvents: "none",
-                  zIndex: 200,
-                  opacity: 0,
-                  transition: "opacity 0.15s",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
-                }}>
-                  {tip}
-                  {/* Arrow */}
-                  <span style={{
-                    position: "absolute",
-                    right: "100%",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    borderWidth: 5,
-                    borderStyle: "solid",
-                    borderColor: "transparent #1A1A1A transparent transparent",
-                  }} />
-                </div>
-              </div>
+                <Icon />
+                <span style={{ fontSize: 13, fontWeight: active ? 600 : 400, letterSpacing: "0.01em" }}>{label}</span>
+              </button>
             );
           })}
         </div>

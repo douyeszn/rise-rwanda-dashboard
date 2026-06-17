@@ -1,4 +1,63 @@
-function StatCard({ label, value, sub, hero = false, accent = false }) {
+function InfoIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <circle cx="7" cy="7" r="6"/>
+      <path d="M7 6.5v3.5"/>
+      <circle cx="7" cy="4.5" r="0.5" fill="currentColor" stroke="none"/>
+    </svg>
+  );
+}
+
+function Tooltip({ text, hero }) {
+  return (
+    <div style={{ position: "relative", display: "inline-flex" }}
+      onMouseEnter={(e) => {
+        const tt = e.currentTarget.querySelector(".stat-tip");
+        if (tt) tt.style.opacity = "1";
+      }}
+      onMouseLeave={(e) => {
+        const tt = e.currentTarget.querySelector(".stat-tip");
+        if (tt) tt.style.opacity = "0";
+      }}
+    >
+      <span style={{ color: hero ? "rgba(255,255,255,0.35)" : "var(--ink-light)", cursor: "default", display: "flex" }}>
+        <InfoIcon />
+      </span>
+      <div className="stat-tip" style={{
+        position: "absolute",
+        bottom: "calc(100% + 8px)",
+        left: "50%",
+        transform: "translateX(-50%)",
+        background: "#1A1A1A",
+        color: "#fff",
+        fontSize: 12,
+        fontWeight: 400,
+        lineHeight: 1.6,
+        padding: "8px 12px",
+        borderRadius: 8,
+        width: 220,
+        pointerEvents: "none",
+        zIndex: 300,
+        opacity: 0,
+        transition: "opacity 0.15s",
+        boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
+      }}>
+        {text}
+        <span style={{
+          position: "absolute",
+          top: "100%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          borderWidth: 5,
+          borderStyle: "solid",
+          borderColor: "#1A1A1A transparent transparent transparent",
+        }} />
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ label, value, sub, hero = false, accent = false, tip }) {
   return (
     <div style={{
       background: hero ? "#16213E" : "var(--card)",
@@ -9,13 +68,16 @@ function StatCard({ label, value, sub, hero = false, accent = false }) {
       gap: 6,
       border: hero ? "none" : "1px solid var(--border)",
     }}>
-      <span style={{
-        fontSize: 11,
-        fontWeight: 500,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-        color: hero ? "rgba(255,255,255,0.45)" : "var(--ink-light)",
-      }}>{label}</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span style={{
+          fontSize: 11,
+          fontWeight: 500,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: hero ? "rgba(255,255,255,0.45)" : "var(--ink-light)",
+        }}>{label}</span>
+        {tip && <Tooltip text={tip} hero={hero} />}
+      </div>
       <span style={{
         fontSize: 40,
         fontWeight: 700,
@@ -36,7 +98,7 @@ function StatCard({ label, value, sub, hero = false, accent = false }) {
   );
 }
 
-function MiniCard({ label, value, sub }) {
+function MiniCard({ label, value, sub, tip }) {
   return (
     <div style={{
       background: "var(--card)",
@@ -47,7 +109,10 @@ function MiniCard({ label, value, sub }) {
       flexDirection: "column",
       gap: 5,
     }}>
-      <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-light)" }}>{label}</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-light)" }}>{label}</span>
+        {tip && <Tooltip text={tip} />}
+      </div>
       <span style={{ fontSize: 32, fontWeight: 700, color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{value}</span>
       {sub && <span style={{ fontSize: 12, color: "var(--ink-light)", fontWeight: 400 }}>{sub}</span>}
     </div>
@@ -74,43 +139,47 @@ export default function Summary({ analytics }) {
         Aggregated across {site_count} sites
       </div>
 
-      {/* Primary row */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
         <StatCard
           hero
           label="Total Enrolled"
           value={total_enrolled.toLocaleString()}
           sub={`across ${site_count} sites`}
+          tip="Total number of learners registered across all learning sites."
         />
         <StatCard
+          accent
           label="Completion Rate"
           value={`${pct_completed}%`}
           sub={`${total_completed.toLocaleString()} at 100%`}
-          accent
+          tip="Percentage of learners who reached 100% progress in their course."
         />
         <StatCard
           label="Active Learners"
           value={total_active.toLocaleString()}
           sub="with interactions"
+          tip="Learners who have at least one recorded interaction in OLI Torus."
         />
         <StatCard
           label="Insufficient Data"
           value={total_not_enough_data.toLocaleString()}
           sub="need more activity"
+          tip="Learners without enough activity for OLI Torus to assess their proficiency level."
         />
       </div>
 
-      {/* Secondary row */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14, marginTop: 14 }}>
         <MiniCard
           label="Avg. High Proficiency / Site"
           value={avg_high_proficiency}
           sub="learners per site at high mastery"
+          tip="Average number of learners per site rated at High proficiency by OLI Torus."
         />
         <MiniCard
           label="Avg. Medium Proficiency / Site"
           value={avg_medium_proficiency}
           sub="learners per site at medium mastery"
+          tip="Average number of learners per site rated at Medium proficiency by OLI Torus."
         />
       </div>
     </div>
