@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dashboard/frontend/dist",
+  "installCommand": "cd dashboard/frontend && npm install",
+  "framework": "vite",
+  "rootDirectory": "."
+}
