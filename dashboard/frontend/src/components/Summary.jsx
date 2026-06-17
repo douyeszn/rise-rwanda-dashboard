@@ -8,7 +8,18 @@ function InfoIcon() {
   );
 }
 
-function Tooltip({ text, hero }) {
+function Tooltip({ text, hero, align = "center" }) {
+  const horizStyle =
+    align === "left"  ? { left: 0 } :
+    align === "right" ? { right: 0 } :
+                        { left: "50%", transform: "translateX(-50%)" };
+
+  const arrowLeft =
+    align === "left"  ? 16 :
+    align === "right" ? "auto" : "50%";
+  const arrowRight = align === "right" ? 16 : "auto";
+  const arrowTransform = align === "center" ? "translateX(-50%)" : "none";
+
   return (
     <div style={{ position: "relative", display: "inline-flex" }}
       onMouseEnter={(e) => {
@@ -26,8 +37,7 @@ function Tooltip({ text, hero }) {
       <div className="stat-tip" style={{
         position: "absolute",
         bottom: "calc(100% + 8px)",
-        left: "50%",
-        transform: "translateX(-50%)",
+        ...horizStyle,
         background: "#1A1A1A",
         color: "#fff",
         fontSize: 12,
@@ -46,8 +56,9 @@ function Tooltip({ text, hero }) {
         <span style={{
           position: "absolute",
           top: "100%",
-          left: "50%",
-          transform: "translateX(-50%)",
+          left: arrowLeft,
+          right: arrowRight,
+          transform: arrowTransform,
           borderWidth: 5,
           borderStyle: "solid",
           borderColor: "#1A1A1A transparent transparent transparent",
@@ -57,7 +68,7 @@ function Tooltip({ text, hero }) {
   );
 }
 
-function StatCard({ label, value, sub, hero = false, accent = false, tip }) {
+function StatCard({ label, value, sub, hero = false, accent = false, tip, tipAlign }) {
   return (
     <div style={{
       background: hero ? "#16213E" : "var(--card)",
@@ -76,7 +87,7 @@ function StatCard({ label, value, sub, hero = false, accent = false, tip }) {
           textTransform: "uppercase",
           color: hero ? "rgba(255,255,255,0.45)" : "var(--ink-light)",
         }}>{label}</span>
-        {tip && <Tooltip text={tip} hero={hero} />}
+        {tip && <Tooltip text={tip} hero={hero} align={tipAlign} />}
       </div>
       <span style={{
         fontSize: 40,
@@ -98,7 +109,7 @@ function StatCard({ label, value, sub, hero = false, accent = false, tip }) {
   );
 }
 
-function MiniCard({ label, value, sub, tip }) {
+function MiniCard({ label, value, sub, tip, tipAlign }) {
   return (
     <div style={{
       background: "var(--card)",
@@ -111,7 +122,7 @@ function MiniCard({ label, value, sub, tip }) {
     }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-light)" }}>{label}</span>
-        {tip && <Tooltip text={tip} />}
+        {tip && <Tooltip text={tip} align={tipAlign} />}
       </div>
       <span style={{ fontSize: 32, fontWeight: 700, color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{value}</span>
       {sub && <span style={{ fontSize: 12, color: "var(--ink-light)", fontWeight: 400 }}>{sub}</span>}
@@ -146,6 +157,7 @@ export default function Summary({ analytics }) {
           value={total_enrolled.toLocaleString()}
           sub={`across ${site_count} sites`}
           tip="Total number of learners registered across all learning sites."
+          tipAlign="left"
         />
         <StatCard
           accent
@@ -153,18 +165,21 @@ export default function Summary({ analytics }) {
           value={`${pct_completed}%`}
           sub={`${total_completed.toLocaleString()} at 100%`}
           tip="Percentage of learners who reached 100% progress in their course."
+          tipAlign="center"
         />
         <StatCard
           label="Active Learners"
           value={total_active.toLocaleString()}
           sub="with interactions"
           tip="Learners who have at least one recorded interaction in OLI Torus."
+          tipAlign="center"
         />
         <StatCard
           label="Insufficient Data"
           value={total_not_enough_data.toLocaleString()}
           sub="need more activity"
           tip="Learners without enough activity for OLI Torus to assess their proficiency level."
+          tipAlign="right"
         />
       </div>
 
@@ -174,12 +189,14 @@ export default function Summary({ analytics }) {
           value={avg_high_proficiency}
           sub="learners per site at high mastery"
           tip="Average number of learners per site rated at High proficiency by OLI Torus."
+          tipAlign="left"
         />
         <MiniCard
           label="Avg. Medium Proficiency / Site"
           value={avg_medium_proficiency}
           sub="learners per site at medium mastery"
           tip="Average number of learners per site rated at Medium proficiency by OLI Torus."
+          tipAlign="right"
         />
       </div>
     </div>
