@@ -36,10 +36,21 @@ const TABS = [
   { id: "upload",   label: "Add Data", Icon: UploadIcon,   tip: "Upload OLI Torus CSV exports or sync from Google Drive" },
 ];
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < breakpoint);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < breakpoint);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function App() {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading]     = useState(true);
   const [tab, setTab]             = useState("overview");
+  const isMobile                  = useIsMobile();
 
   const fetchAnalytics = useCallback(async () => {
     try {
@@ -60,89 +71,71 @@ export default function App() {
   return (
     <div style={{ display: "flex", minHeight: "100vh", width: "100%" }}>
 
-      {/* ── Sidebar ──────────────────────────────────────────────── */}
-      <nav style={{
-        width: 160,
-        background: "var(--sidebar)",
-        position: "fixed",
-        top: 0, left: 0, bottom: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        padding: "20px 12px",
-        zIndex: 100,
-      }}>
-        {/* Wordmark */}
-        <div style={{
+      {/* ── Desktop Sidebar ──────────────────────────────────────── */}
+      {!isMobile && (
+        <nav style={{
+          width: 160,
+          background: "var(--sidebar)",
+          position: "fixed",
+          top: 0, left: 0, bottom: 0,
           display: "flex",
-          alignItems: "center",
-          gap: 10,
-          paddingLeft: 8,
-          marginBottom: 36,
+          flexDirection: "column",
+          alignItems: "flex-start",
+          padding: "20px 12px",
+          zIndex: 100,
         }}>
-          <div style={{
-            width: 32, height: 32,
-            background: "#fff",
-            borderRadius: 9,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}>
-            <span style={{ fontWeight: 700, fontSize: 14, color: "#16213E", letterSpacing: "-0.03em" }}>R</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, paddingLeft: 8, marginBottom: 36 }}>
+            <div style={{
+              width: 32, height: 32, background: "#fff", borderRadius: 9,
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}>
+              <span style={{ fontWeight: 700, fontSize: 14, color: "#16213E", letterSpacing: "-0.03em" }}>R</span>
+            </div>
+            <span style={{ fontWeight: 700, fontSize: 13, color: "#fff", letterSpacing: "0.04em" }}>RISE</span>
           </div>
-          <span style={{ fontWeight: 700, fontSize: 13, color: "#fff", letterSpacing: "0.04em" }}>RISE</span>
-        </div>
 
-        {/* Nav items */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
-          {TABS.map(({ id, label, Icon }) => {
-            const active = tab === id;
-            return (
-              <button
-                key={id}
-                onClick={() => setTab(id)}
-                style={{
-                  width: "100%",
-                  padding: "9px 10px",
-                  paddingLeft: active ? 8 : 10,
-                  borderRadius: 10,
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 10,
-                  background: active ? "rgba(255,255,255,0.10)" : "transparent",
-                  border: "none",
-                  borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                  color: active ? "#fff" : "rgba(255,255,255,0.4)",
-                  cursor: "pointer",
-                  transition: "background 0.15s, color 0.15s, border-color 0.15s",
-                  textAlign: "left",
-                }}
-                onMouseEnter={(e) => {
-                  if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.07)";
-                }}
-                onMouseLeave={(e) => {
-                  if (!active) e.currentTarget.style.background = "transparent";
-                }}
-              >
-                <Icon />
-                <span style={{ fontSize: 13, fontWeight: active ? 600 : 400, letterSpacing: "0.01em" }}>{label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </nav>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
+            {TABS.map(({ id, label, Icon }) => {
+              const active = tab === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setTab(id)}
+                  style={{
+                    width: "100%", padding: "9px 10px", paddingLeft: active ? 8 : 10,
+                    borderRadius: 10, display: "flex", flexDirection: "row", alignItems: "center", gap: 10,
+                    background: active ? "rgba(255,255,255,0.10)" : "transparent",
+                    border: "none", borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                    color: active ? "#fff" : "rgba(255,255,255,0.4)",
+                    cursor: "pointer", transition: "background 0.15s, color 0.15s, border-color 0.15s", textAlign: "left",
+                  }}
+                  onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.07)"; }}
+                  onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
+                >
+                  <Icon />
+                  <span style={{ fontSize: 13, fontWeight: active ? 600 : 400, letterSpacing: "0.01em" }}>{label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      )}
 
       {/* ── Content ──────────────────────────────────────────────── */}
-      <div style={{ marginLeft: 160, flex: 1, display: "flex", flexDirection: "column" }}>
+      <div style={{
+        marginLeft: isMobile ? 0 : 160,
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        minWidth: 0,
+      }}>
 
         {/* Top bar */}
         <header style={{
           background: "var(--card)",
           borderBottom: "1px solid var(--border)",
-          padding: "0 36px",
-          height: 60,
+          padding: isMobile ? "0 16px" : "0 36px",
+          height: 56,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -150,23 +143,31 @@ export default function App() {
           top: 0,
           zIndex: 50,
         }}>
-          <div>
-            <span style={{ fontWeight: 700, fontSize: 16, color: "var(--ink)", letterSpacing: "-0.02em" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {isMobile && (
+              <div style={{
+                width: 28, height: 28, background: "var(--sidebar)", borderRadius: 7,
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              }}>
+                <span style={{ fontWeight: 700, fontSize: 12, color: "#fff" }}>R</span>
+              </div>
+            )}
+            <span style={{ fontWeight: 700, fontSize: isMobile ? 14 : 16, color: "var(--ink)", letterSpacing: "-0.02em" }}>
               {TABS.find((t) => t.id === tab)?.label}
             </span>
-            {tab === "overview" && hasData && (
+            {tab === "overview" && hasData && !isMobile && (
               <span style={{ marginLeft: 12, fontSize: 13, color: "var(--ink-light)", fontWeight: 400 }}>
                 {analytics.site_count} sites · {analytics.total_enrolled.toLocaleString()} learners
               </span>
             )}
           </div>
-          <div style={{ fontSize: 12, color: "var(--ink-light)", fontWeight: 500, letterSpacing: "0.04em" }}>
+          <div style={{ fontSize: 11, color: "var(--ink-light)", fontWeight: 500, letterSpacing: "0.04em" }}>
             RISE RWANDA
           </div>
         </header>
 
         {/* Main */}
-        <main style={{ flex: 1, padding: "32px 36px 60px" }}>
+        <main style={{ flex: 1, padding: isMobile ? "20px 16px 90px" : "32px 36px 60px" }}>
           {loading ? (
             <div style={{ paddingTop: 80, textAlign: "center", color: "var(--ink-light)", fontSize: 13, letterSpacing: "0.05em" }}>
               Loading…
@@ -180,7 +181,7 @@ export default function App() {
           ) : (
             <>
               <Summary analytics={analytics} />
-              <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 20, marginTop: 20 }}>
+              <div className="chart-grid">
                 <SiteChart sites={analytics.sites} />
                 <ProficiencyChart sites={analytics.sites} />
               </div>
@@ -188,6 +189,48 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* ── Mobile Bottom Nav ─────────────────────────────────────── */}
+      {isMobile && (
+        <nav style={{
+          position: "fixed",
+          bottom: 0, left: 0, right: 0,
+          height: 64,
+          background: "var(--sidebar)",
+          display: "flex",
+          alignItems: "stretch",
+          zIndex: 100,
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+        }}>
+          {TABS.map(({ id, label, Icon }) => {
+            const active = tab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 4,
+                  background: "transparent",
+                  border: "none",
+                  borderTop: active ? "2px solid var(--accent)" : "2px solid transparent",
+                  color: active ? "#fff" : "rgba(255,255,255,0.4)",
+                  cursor: "pointer",
+                  transition: "color 0.15s, border-color 0.15s",
+                  paddingBottom: 4,
+                }}
+              >
+                <Icon />
+                <span style={{ fontSize: 10, fontWeight: active ? 600 : 400, letterSpacing: "0.03em" }}>{label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      )}
     </div>
   );
 }

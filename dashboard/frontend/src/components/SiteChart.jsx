@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
-const LIMITS = [10, 20, 50, "All"];
+const LIMITS = [5, 10, 20, 50, "All"];
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
@@ -20,7 +20,17 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 export default function SiteChart({ sites }) {
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(() => window.innerWidth < 768 ? 5 : 10);
+
+  useEffect(() => {
+    const handler = () => setLimit((prev) => {
+      const mobile = window.innerWidth < 768;
+      if (mobile && !LIMITS.includes(prev)) return 5;
+      return prev;
+    });
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
 
   const sorted = [...sites].sort((a, b) => b.pct_completed - a.pct_completed);
   const top = limit === "All" ? sorted : sorted.slice(0, limit);

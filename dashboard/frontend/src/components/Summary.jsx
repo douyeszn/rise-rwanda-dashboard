@@ -150,7 +150,7 @@ export default function Summary({ analytics }) {
         Aggregated across {site_count} sites
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+      <div className="stat-grid">
         <StatCard
           hero
           label="Total Enrolled"
@@ -183,7 +183,7 @@ export default function Summary({ analytics }) {
         />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14, marginTop: 14 }}>
+      <div className="mini-grid">
         <MiniCard
           label="Avg. High Proficiency / Site"
           value={avg_high_proficiency}
