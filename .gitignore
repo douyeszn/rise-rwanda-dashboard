@@ -26,3 +26,4 @@ dashboard/data/*.csv
 # PDF / docs (not code)
 *.pdf
 *.docx
+.vercel
