@@ -8,19 +8,22 @@ These rules apply every session. Do not wait to be reminded.
 Always invoke the `frontend-design` skill before writing any web component, page, or dashboard UI.
 Victor finds default AI-generated aesthetics unacceptable.
 
-**Victor's required design style — Modern Monochrome:**
-- Dark near-black left sidebar, icon-only, ~70px wide
-- Page background: `#F6F6F6` (light grey, never pure white)
-- Cards: `#FFFFFF`, border-radius 12–16px, minimal shadow
-- Colors: black + white + grey ONLY — no accent colors
+**Victor's required design style — Modern Monochrome (navy + blue):**
+- Dark navy left sidebar (`#16213E`, ~160px wide), icon + label side-by-side
+- Page background: `#C8C8C8` — medium grey, never white or light grey
+- Cards: `#F0F0F0`, border-radius 12–16px, `1px #EBEBEB` border
+- Accent: `#3B82F6` sky blue — active nav indicator + one key stat only
 - Font: `Plus Jakarta Sans` (bold numbers, medium labels)
-- Buttons: solid black `#111111`, white text, rounded
-- Stats: large bold number + small grey label side by side
-- Charts: monochrome bars/lines only
+- Buttons: solid `#16213E`, white text, rounded
+- Stats: large bold number + small grey label; hero card inverted (`#16213E` bg)
+- Charts: navy tonal scale (`#16213E` → `#2A4A7F` → `#7BAFD4` → `#C2D8EE`)
+- Text: primary `#1A1A1A`, secondary `#444444`, muted `#666666`
+- NO pure black (`#000`/`#111`) — always use `#16213E` as the darkest tone
 
-### Writing (documents, reports, emails, formal content)
-Always invoke the `writing` skill before drafting or editing any professional document,
-report, email template, or formal written content.
+### Writing — always invoke for any generated text
+Always invoke the `writing` skill before drafting or editing **any** text output
+intended for Victor: professional documents, reports, emails, formal content,
+UI copy, tooltips, error messages, labels, or any text that will be read by others.
 
 ### Code review / verification
 After completing any non-trivial code change, run the `verify` or `code-review` skill
