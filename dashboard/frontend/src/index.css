@@ -11,6 +11,16 @@
   --accent:     #3B82F6;
 
   --font-sans:  'Plus Jakarta Sans', system-ui, sans-serif;
+
+  --num-lg: 40px;
+  --num-md: 32px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --num-lg: 26px;
+    --num-md: 20px;
+  }
 }
 
 html, body { height: 100%; }

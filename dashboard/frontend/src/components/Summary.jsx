@@ -90,7 +90,7 @@ function StatCard({ label, value, sub, hero = false, accent = false, tip, tipAli
         {tip && <Tooltip text={tip} hero={hero} align={tipAlign} />}
       </div>
       <span style={{
-        fontSize: 40,
+        fontSize: "var(--num-lg)",
         fontWeight: 700,
         color: accent ? "#2A4A7F" : hero ? "#fff" : "var(--ink)",
         lineHeight: 1,
@@ -124,7 +124,7 @@ function MiniCard({ label, value, sub, tip, tipAlign }) {
         <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-light)" }}>{label}</span>
         {tip && <Tooltip text={tip} align={tipAlign} />}
       </div>
-      <span style={{ fontSize: 32, fontWeight: 700, color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{value}</span>
+      <span style={{ fontSize: "var(--num-md)", fontWeight: 700, color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{value}</span>
       {sub && <span style={{ fontSize: 12, color: "var(--ink-light)", fontWeight: 400 }}>{sub}</span>}
     </div>
   );
