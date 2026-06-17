@@ -18,8 +18,7 @@ app = FastAPI(title="RISE Analytics API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://rise-rwanda-dashboard.vercel.app"],
-    allow_origin_regex=r"http://localhost:\d+",
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
