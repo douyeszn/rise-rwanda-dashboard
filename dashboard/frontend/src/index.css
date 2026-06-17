@@ -1,0 +1,30 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:        #1A1A1A;
+  --ink-mid:    #444444;
+  --ink-light:  #666666;
+  --bg:         #C8C8C8;
+  --card:       #F0F0F0;
+  --border:     #EBEBEB;
+  --sidebar:    #16213E;
+  --accent:     #3B82F6;
+
+  --font-sans:  'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#root { min-height: 100vh; display: flex; }
+
+button { font-family: var(--font-sans); cursor: pointer; }
+input  { font-family: var(--font-sans); }
+code   { font-family: 'DM Mono', 'Courier New', monospace; background: var(--border); padding: 2px 6px; border-radius: 3px; font-size: 12px; color: var(--ink-mid); }
