@@ -5,7 +5,7 @@ import SiteTable from "./components/SiteTable";
 import SiteChart from "./components/SiteChart";
 import ProficiencyChart from "./components/ProficiencyChart";
 
-const API = "http://localhost:8000";
+const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const OverviewIcon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
