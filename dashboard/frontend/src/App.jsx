@@ -33,7 +33,7 @@ const UploadIcon = () => (
 const TABS = [
   { id: "overview", label: "Overview", Icon: OverviewIcon, tip: "Summary stats, charts and proficiency breakdown across all sites" },
   { id: "sites",    label: "By Site",  Icon: SitesIcon,    tip: "Sortable table of every site — completion %, active learners, proficiency counts" },
-  { id: "upload",   label: "Add Data", Icon: UploadIcon,   tip: "Upload OLI Torus CSV exports or sync from Google Drive" },
+  // { id: "upload",   label: "Add Data", Icon: UploadIcon,   tip: "Upload OLI Torus CSV exports or sync from Google Drive" },
 ];
 
 function useIsMobile(breakpoint = 768) {
